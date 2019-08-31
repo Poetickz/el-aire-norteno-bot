@@ -1,2 +1,4 @@
 #This files will be ignored to push
 secrets/twitter-keys.yml
+.gitignore
+Gemfile.lock
