@@ -1,4 +1,4 @@
-#This files will be ignored to push
-secrets/twitter-keys.yml
+#This files will be ignored when you push a commit
+twitter-keys.yml
 .gitignore
 Gemfile.lock
