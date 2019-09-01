@@ -16,13 +16,13 @@ The key objective of this bot is to become aware and inform about the air qualit
 
 ### Twitter bot account
 
-You can find our bot in with the name [@ElAireNorteno](https://twitter.com/ElAireNorteno) in Twitter.
+You can find our bot with the name [@ElAireNorteno](https://twitter.com/ElAireNorteno) in Twitter.
 
 ### The Team
 
 | Name  | Email | Role |
 | ------------- | ------------- | ------------- |
-| Alan Rocha | alan.rocha@udem.edu  | Development / Management |
+| Alan Rocha | alan.rocha@udem.edu  | Development |
 | Gladys Garza | gladys.garza@udem.edu | Development |
 
 ## Development
