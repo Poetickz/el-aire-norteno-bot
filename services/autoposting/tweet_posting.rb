@@ -27,6 +27,25 @@ def aqi_warning(aqi)
    
 end
 
+def get_aqi_img(aqi)
+    img = 0
+    case aqi 
+    when 0..50
+      img = 1
+    when 51..100
+        img = 2
+    when 101..150
+        img = 3
+    when 151..200
+        img = 4
+    when 201..300
+        img = 4
+    else
+        img = 4
+    end
+    "../../src/images/#{img}.jpg"
+end
+
 
 time = 1800
   
@@ -44,11 +63,7 @@ time = 1800
   avg_aqi = (all_aqi.values.reduce(:+) / all_aqi.size.to_f).round
 
   tweet = "La calidad del aire en la área metropolitana de Monterrey es de #{avg_aqi} AQI.\n#{aqi_warning(avg_aqi)} \n¡Ajua Pariente!🤠"
-  puts tweet
-  
-  # if  not (doc.css(".tags .tag").text.include?("futanari") || doc.css(".tags .tag").text.include?("yaoi"))
-  #   @restClient.update("#{tweet}")
-  #   puts tweet
+  @restClient.update_with_media("#{tweet}", File.new("#{get_aqi_img(avg_aqi)")}")
 
   # else
   #   time = 1
