@@ -68,4 +68,3 @@ begin
 rescue => exception
   puts "Error ocurrido: \n #{exception}"
 end
-
