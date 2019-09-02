@@ -14,15 +14,15 @@ def aqi_warning(aqi)
   when 0..50
     "El aire está hermoso pariente, disfruta tu día compa."
   when 51..100
-    "El aire está regular pero no es dañino compa."
+    "El aire está regular pero no es dañino, una carnita más y nos lleva la @$%&%."
   when 101..150
     "El aire está malo, evita realizar cualquier esfuerzo fuerte compa."
   when 151..200
-    "El aire está malisimo, trata de no salir a la calle compa."
+    "El aire está malisimo, igual que el reggeton."
   when 201..300
-    "El aire está horrible, no salgas a la calle compa."
+    "El aire está horrible, tener la vida de Demmi Lovato es mejor."
   else
-    "¿En serio llegamos a este nivel? Este nivel es lo peor de lo pero, no salgas a la calle. "
+    "Vete a Chernobyl es más saludable "
   end
    
 end
