@@ -63,7 +63,7 @@ time = 1800
   avg_aqi = (all_aqi.values.reduce(:+) / all_aqi.size.to_f).round
 
   tweet = "La calidad del aire en la área metropolitana de Monterrey es de #{avg_aqi} AQI.\n#{aqi_warning(avg_aqi)} \n¡Ajua Pariente!🤠"
-  @restClient.update_with_media("#{tweet}", File.new("#{get_aqi_img(avg_aqi)")}")
+  @restClient.update_with_media("#{tweet}", File.new("#{get_aqi_img(avg_aqi)}"))
 
   # else
   #   time = 1
