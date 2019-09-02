@@ -69,7 +69,8 @@ while true
   @restClient.update_with_media("#{tweet}", File.new("#{get_aqi_img(avg_aqi)}"))
 
   rescue => exception
-    sleep 60      
+    sleep 60
+    puts "Error ocurrido: \n #{exception}"
   end
   sleep time
 end
