@@ -1,5 +1,7 @@
-
 {
     "name": "el-aire-norteno",
-    "private": true
-  }
+    "private": true,
+    "dependencies": {
+        "cron": "^1.7.1"
+    }
+}
