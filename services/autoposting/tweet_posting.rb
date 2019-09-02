@@ -43,7 +43,7 @@ def get_aqi_img(aqi)
     else
         img = 4
     end
-    "../../src/images/#{img}.jpg"
+    "src/images/#{img}.jpg"
 end
 
 time = 28800
@@ -67,9 +67,10 @@ while true
 
   tweet = "La calidad del aire en la área metropolitana de Monterrey es de #{avg_aqi} AQI.\n#{aqi_warning(avg_aqi)} \n¡Ajua Pariente!🤠"
   @restClient.update_with_media("#{tweet}", File.new("#{get_aqi_img(avg_aqi)}"))
+  puts tweet
 
   rescue => exception
-    sleep 60
+    sleep 2
     puts "Error ocurrido: \n #{exception}"
   end
   sleep time
