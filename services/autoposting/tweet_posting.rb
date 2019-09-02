@@ -46,9 +46,12 @@ def get_aqi_img(aqi)
     "../../src/images/#{img}.jpg"
 end
 
+time = 28800
 
-time = 1800
-  
+while true
+
+
+  begin
   all_aqi = {
     aq_garcia: get_aqi("garcia"),
     aq_monterrey: get_aqi("metrorrey"),
@@ -65,8 +68,10 @@ time = 1800
   tweet = "La calidad del aire en la área metropolitana de Monterrey es de #{avg_aqi} AQI.\n#{aqi_warning(avg_aqi)} \n¡Ajua Pariente!🤠"
   @restClient.update_with_media("#{tweet}", File.new("#{get_aqi_img(avg_aqi)}"))
 
-  # else
-  #   time = 1
-  # end
+  rescue => exception
+    sleep 60      
+  end
+  sleep time
+end
 
 
