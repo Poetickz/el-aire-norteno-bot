@@ -46,7 +46,7 @@ def get_aqi_img(aqi)
     "src/images/#{img}.jpg"
 end
 
-time = 28800
+time = 10
 
 while true
 
