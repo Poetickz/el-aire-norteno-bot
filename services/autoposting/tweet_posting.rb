@@ -46,12 +46,8 @@ def get_aqi_img(aqi)
     "src/images/#{img}.jpg"
 end
 
-time = 10
 
-while true
-
-
-  begin
+begin
   all_aqi = {
     aq_garcia: get_aqi("garcia"),
     aq_monterrey: get_aqi("metrorrey"),
@@ -69,11 +65,7 @@ while true
   @restClient.update_with_media("#{tweet}", File.new("#{get_aqi_img(avg_aqi)}"))
   puts tweet
 
-  rescue => exception
-    sleep 2
-    puts "Error ocurrido: \n #{exception}"
-  end
-  sleep time
-end
+rescue => exception
+  puts "Error ocurrido: \n #{exception}"
 
 
