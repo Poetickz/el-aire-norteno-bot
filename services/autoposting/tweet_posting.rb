@@ -23,6 +23,12 @@ time = 1800
     aq_escobedo: get_aqi("escobedo")
   }
 
+  avg_aqi = all_aqi.values.reduce(:+) / all_aqi.size.to_f
+
+
+  puts avg_aqi.round
+
+  tweet = "Link: \nName:"
   
   # if  not (doc.css(".tags .tag").text.include?("futanari") || doc.css(".tags .tag").text.include?("yaoi"))
   #   @restClient.update("#{tweet}")
