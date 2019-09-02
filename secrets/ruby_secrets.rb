@@ -1,7 +1,7 @@
 require 'yaml'
 require 'twitter'
 
-twitter_keys = YAML.load(File.read("secrets/twitter-keys.yml"))
+twitter_keys = YAML.load(File.read("../../secrets/twitter-keys.yml"))
 
 config = {
     consumer_key:        twitter_keys["twitter-keys"]["api-key"],
