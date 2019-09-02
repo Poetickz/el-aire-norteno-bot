@@ -30,5 +30,5 @@ You can find our bot with the name [@ElAireNorteno](https://twitter.com/ElAireNo
 - Code Language: Ruby 2.6 & Python 3.6
 
 ### External Services 
-- [Google App Engine](https://www.heroku.com/home): It's a web hosting service that provides Google that allows you to run applications on Google's infrastructure.
+- [Heroku](https://www.heroku.com/home):  Cloud platform as a service (PaaS) where the production and staging environments of the application are running.
 
