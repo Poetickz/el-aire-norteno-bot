@@ -9,6 +9,24 @@ def get_aqi(city)
   doc.css("div#aqiwgtvalue")[0].text.to_i
 end
 
+def aqi_warning(aqi)
+  case aqi 
+  when 0..50
+    "El aire está hermoso pariente, disfruta tu día compa."
+  when 51..100
+    "El aire está regular pero no es dañino compa."
+  when 101..150
+    "El aire está malo, evita realizar cualquier esfuerzo fuerte compa."
+  when 151..200
+    "El aire está malisimo, trata de no salir a la calle compa."
+  when 201..300
+    "El aire está horrible, no salgas a la calle compa."
+  else
+    "¿En serio llegamos a este nivel? Este nivel es lo peor de lo pero, no salgas a la calle. "
+  end
+   
+end
+
 
 time = 1800
   
@@ -23,12 +41,10 @@ time = 1800
     aq_escobedo: get_aqi("escobedo")
   }
 
-  avg_aqi = all_aqi.values.reduce(:+) / all_aqi.size.to_f
+  avg_aqi = (all_aqi.values.reduce(:+) / all_aqi.size.to_f).round
 
-
-  puts avg_aqi.round
-
-  tweet = "Link: \nName:"
+  tweet = "La calidad del aire en la área metropolitana de Monterrey es de #{avg_aqi} AQI.\n#{aqi_warning(avg_aqi)} \n¡Ajua Pariente!🤠"
+  puts tweet
   
   # if  not (doc.css(".tags .tag").text.include?("futanari") || doc.css(".tags .tag").text.include?("yaoi"))
   #   @restClient.update("#{tweet}")
