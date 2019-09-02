@@ -1,2 +1,4 @@
 #This files will be ignored when you push a commit
 twitter-keys.yml
+package-lock.json
+node_modules/
