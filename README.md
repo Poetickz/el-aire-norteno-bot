@@ -20,10 +20,10 @@ You can find our bot with the name [@ElAireNorteno](https://twitter.com/ElAireNo
 
 ### The Team
 
-| Name  | Email | Role |
-| ------------- | ------------- | ------------- |
-| Alan Rocha | alan.rocha@udem.edu  | Development |
-| Gladys Garza | gladys.garza@udem.edu | Development |
+|     Name     |        Email          |   Role    |
+| ------------ | --------------------- | --------- |
+| Alan Rocha   | alan.rocha@udem.edu   | Developer |
+| Gladys Garza | gladys.garza@udem.edu | Developer |
 
 ## Development
 ### Stack 

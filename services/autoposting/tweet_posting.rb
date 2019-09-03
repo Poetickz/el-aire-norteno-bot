@@ -43,7 +43,7 @@ def get_aqi_img(aqi)
     else
         img = 4
     end
-    "src/images/#{img}.jpg"
+    "src/images/#{img}.png"
 end
 
 
