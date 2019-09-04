@@ -41,7 +41,7 @@ def get_aqi_img(aqi)
     when 201..300
         img = 4
     else
-        img = 4
+         img = 4
     end
     "src/images/#{img}.png"
 end
