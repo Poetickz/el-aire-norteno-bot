@@ -1,9 +1,11 @@
 require_relative '../../secrets/ruby_secrets'
 require 'nokogiri'
 require 'open-uri'
+require 'descriptive_statistics'
+
+CHAUVENET_COEF = {3 => 1.38, 4 => 1.54, 5 => 1.65, 6 => 1.73, 7 => 1.80, 8 => 1.86}
 
 def get_aqi(city)
-  puts city
   url = "https://aqicn.org/city/mexico/nuevo-leon/#{city}"
   doc = Nokogiri::HTML(open(url))
   doc.css("div#aqiwgtvalue")[0].text.to_i
@@ -25,6 +27,25 @@ def aqi_warning(aqi)
     "Vete a Chernobyl es más saludable "
   end
    
+end
+
+def chauvenet_criteria( aqis )
+
+  k = CHAUVENET_COEF[aqis.size] ||= CHAUVENET_COEF[1]
+  range_of_aqi = {
+    max_value: (aqis.mean + k * aqis.standard_deviation),
+    min_value: (aqis.mean - k * aqis.standard_deviation)
+  }
+end
+
+def checking_data(range_of_aqi, aqis)
+  ref_aqis = aqis
+  aqis = aqis.reject do |key, value| 
+    (value == 0 || (not value.between?(range_of_aqi[:min_value], range_of_aqi[:max_value])))
+  end
+  return checking_data(chauvenet_criteria( aqis ), aqis) if ref_aqis != aqis
+  puts aqis
+  return aqis
 end
 
 def get_aqi_img(aqi)
@@ -59,7 +80,7 @@ begin
     aq_escobedo: get_aqi("escobedo")
   }
 
-  avg_aqi = (all_aqi.values.reduce(:+) / all_aqi.size.to_f).round
+  avg_aqi = checking_data(chauvenet_criteria( all_aqi ), all_aqi).mean.round
 
   tweet = "La calidad del aire en la área metropolitana de Monterrey es de #{avg_aqi} AQI.\n#{aqi_warning(avg_aqi)} \n¡Ajua Pariente!🤠"
   @restClient.update_with_media("#{tweet}", File.new("#{get_aqi_img(avg_aqi)}"))
