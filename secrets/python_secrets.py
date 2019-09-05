@@ -2,7 +2,7 @@ import yaml
 import tweepy
 
 # load the yaml file
-document = open('twitter-keys.yml', 'r')
+document = open('secrets/twitter-keys.yml', 'r')
 # and finally parse the file
 parsed = yaml.load(document)
 
