@@ -1,4 +1,5 @@
-import tweepy, time
+import tweepy
+import time
 import os, sys
 sys.path.insert(0, "./secrets/")
 from python_secrets import *
@@ -14,7 +15,7 @@ FILE_NAME = 'last_seen_id.txt'
 
 def retrieve_last_seen_id(file_name):
     f_read = open(file_name, 'r')
-    last_seen_id = int(f_read.read().strip())
+    last_seen_id = (f_read.read().strip())
     f_read.close()
     return last_seen_id
 
@@ -25,24 +26,21 @@ def store_last_seen_id(last_seen_id, file_name):
     return
 
 def reply_to_tweets():
-    print('retrieving and replying to tweets...', flush=True)
+    print('retrieving and replying to tweets...')
    
     last_seen_id = retrieve_last_seen_id(FILE_NAME)
     
-    mentions = api.mentions_timeline(
-                        last_seen_id,
-                        tweet_mode='extended')
+    mentions = api.mentions_timeline()
     for mention in reversed(mentions):
-        print(str(mention.id) + ' - ' + mention.full_text, flush=True)
+        print(str(mention.id) + ' - ' + mention.text)
         last_seen_id = mention.id
         store_last_seen_id(last_seen_id, FILE_NAME)
-        if '#helloworld' in mention.full_text.lower():
-            print('found #helloworld!', flush=True)
-            print('responding back...', flush=True)
+        if '#helloworld' in mention.text.lower():
+            print('found #helloworld!')
+            print('responding back...')
             api.update_status('@' + mention.user.screen_name +
                     '#HelloWorld back to you!', mention.id)
 
 while True:
-    print("yo pueddooo")
     reply_to_tweets()
     time.sleep(15)
