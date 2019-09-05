@@ -11,7 +11,7 @@ auth.set_access_token(access_token, access_token_secret)
 auth.secure = True
 api = tweepy.API(auth)
 
-FILE_NAME = 'last_seen_id.txt'
+FILE_NAME = './services/replying/last_seen_id.txt'
 
 def retrieve_last_seen_id(file_name):
     f_read = open(file_name, 'r')
@@ -26,21 +26,22 @@ def store_last_seen_id(last_seen_id, file_name):
     return
 
 def reply_to_tweets():
-    print('retrieving and replying to tweets...')
+    print('retrieving and replying to tweets...', flush=True)
    
     last_seen_id = retrieve_last_seen_id(FILE_NAME)
-    
-    mentions = api.mentions_timeline()
+   
+    mentions = api.mentions_timeline(last_seen_id, tweet_mode='extended')
+
     for mention in reversed(mentions):
-        print(str(mention.id) + ' - ' + mention.text)
+        print(str(mention.id) + ' - ' + mention.full_text, flush=True)
         last_seen_id = mention.id
         store_last_seen_id(last_seen_id, FILE_NAME)
-        if '#helloworld' in mention.text.lower():
-            print('found #helloworld!')
-            print('responding back...')
+        if '#helloworld' in mention.full_text.lower():
+            print('found #helloworld!', flush=True)
+            print('responding back...', flush=True)
             api.update_status('@' + mention.user.screen_name +
                     '#HelloWorld back to you!', mention.id)
 
 while True:
     reply_to_tweets()
-    time.sleep(15)
+    time.sleep(5)
