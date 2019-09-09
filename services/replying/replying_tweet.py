@@ -32,14 +32,14 @@ def switchvalue(datos):
         sr = 'mal'
     if datos >= 201 or datos <= 300:
         sr = 'pesimo'
-    return switcher[datos]
+    return sr
 
 def is_similar(first, second, ratio):
     return difflib.SequenceMatcher(None, first, second).ratio() > ratio
 
 def listas(full_text):
     ciudad = "-"
-    posibles = ["garcia", "mnty", "monterrey", "monty", "monterey", "san nico", "sannico", "san nicolas", "san nicolás", "sannicolas", "sannicolás", "sn", "s n", "s. n.", "s.n.", "santa catarina", "s c", "s. c.", "sc", "santa cata", "s catarina", "san pedro", "sanpedro", "sp", "s.p.", "s p", "s. p.", "guadalupe", "gpe", "la pastora", "apodaca", "escobedo"]
+    posibles = ["garcia", "mnty", "monterrey", "monty", "monterey", "san nico", "sannico", "san nicolas", "san nicolás", "sannicolas", "sannicolás", "sn", "s n", "s. n.", "s.n.", "santa catarina", "s c", "s. c.", "sc", "santa cata", "s catarina", "san pedro", "sanpedro", "sp", "s.p.", "s p", "s. p.", "guadalupe", "gpe", "la pastora", "apodaca", "escobedo", "cumbres"]
     not_full_text = full_text.split()
 
     for x in range(len(posibles)):
@@ -55,11 +55,13 @@ def busco_cuidad(full_text):
     ciudad = listas(full_text)
     
     if (ciudad != "-"):
+        if ciudad == "cumbres" :
+            ciudad = "metrorrey"
         first = [ciudad]
         second = ["garcia", "metrorrey", "san-nicolas", "s.-catarina", "s.-pedro", "pastora", "apodaca", "escobedo"]
         result = [s for f in first for s in second if is_similar(f,s, 0.7)]
-        lugar = result[0]
-        URL ="https://aqicn.org/city/mexico/nuevo-leon/" + lugar
+        lugar = result
+        URL ="https://aqicn.org/city/mexico/nuevo-leon/" + str(lugar)
         r = requests.get(URL) 
         soup = BeautifulSoup(r.text, 'html.parser')
         datos = soup.find('div', id='aqiwgtvalue').text.strip()
@@ -87,10 +89,8 @@ def store_last_seen_id(last_seen_id, file_name):
 
 #contesta los tweets encontrados
 def reply_to_tweets():
-    print('retrieving and replying to tweets...', flush=True)
-   
+    print('Revisando nuevos tweets', flush=True)
     last_seen_id = retrieve_last_seen_id(FILE_NAME)
-   
     mentions = api.mentions_timeline(last_seen_id, tweet_mode='extended')
 
     for mention in reversed(mentions):
@@ -98,23 +98,20 @@ def reply_to_tweets():
         last_seen_id = mention.id
         store_last_seen_id(last_seen_id, FILE_NAME)
         if '#comoestaelairede' in mention.full_text.lower():
-            print('found #comoestaelairede', flush=True)
-            print('responding back...', flush=True)
-            ciudad = "0"
+            print('encontre #comoestaelairede', flush=True)
             datos = busco_cuidad(mention.full_text.lower())
-            
+            resp = switchvalue(datos)
+
             switcher = {
                 'error' : "Lo siento, no te entendi, vuelve a preguntar por favor compa",
-                'poco' : "La calidad del aire en" +ciudad+ "es de "+datos+ " AQI El aire está hermoso pariente, disfruta tu día compa.",
-                'medio' : "La calidad del aire en" +ciudad+ "es de "+datos+ " AQI El aire está regular pero no es dañino, una carnita más y nos lleva la @$%&%.",
-                'mucho' : "La calidad del aire en" +ciudad+ "es de "+datos+ " AQI El aire está malo, evita realizar cualquier esfuerzo fuerte compa.",
-                'mal' : "La calidad del aire en" +ciudad+ "es de "+datos+ " AQI El aire está malisimo, igual que el reggeton.",
-                'pesimo' : "La calidad del aire en" +ciudad+ "es de "+datos+ " AQI El aire está horrible, tener la vida de Demmi Lovato es mejor.",
+                'poco' : "La calidad del aire es de "+datos+ " AQI El aire está hermoso pariente, disfruta tu día compa.",
+                'medio' : "La calidad del aire es de "+datos+ " AQI El aire está regular pero no es dañino, una carnita más y nos lleva la @$%&%.",
+                'mucho' : "La calidad del aire es de "+datos+ " AQI El aire está malo, evita realizar cualquier esfuerzo fuerte compa.",
+                'mal' : "La calidad del aire es de "+datos+ " AQI El aire está malisimo, igual que el reggeton.",
+                'pesimo' : "La calidad del aire es de "+datos+ " AQI El aire está horrible, tener la vida de Demi Lovato es mejor.",
             }
-
-            resp = switchvalue(datos)
             
-            api.update_status('@' + mention.user.screen_name+"  "+resp, mention.id)
+            api.update_status('@' + mention.user.screen_name+"  "+switcher[resp], mention.id)
             
 
 while True:
