@@ -34,34 +34,34 @@ def switchvalue(datos):
         sr = 'pesimo'
     return sr
 
-def is_similar(first, second, ratio):
-    return difflib.SequenceMatcher(None, first, second).ratio() > ratio
+
 
 def listas(full_text):
-    ciudad = "-"
-    posibles = ["garcia", "mnty", "monterrey", "monty", "monterey", "san nico", "sannico", "san nicolas", "san nicolás", "sannicolas", "sannicolás", "sn", "s n", "s. n.", "s.n.", "santa catarina", "s c", "s. c.", "sc", "santa cata", "s catarina", "san pedro", "sanpedro", "sp", "s.p.", "s p", "s. p.", "guadalupe", "gpe", "la pastora", "apodaca", "escobedo", "cumbres"]
+    ciudad = "-" 
+    cities = {
+        "#monterrey": "metrorrey",
+        "#cumbres": "metrorrey",
+        "#guadalupe": "pastora",
+        "#sanpedro": "s.-pedro",
+        "#garcia": "garcia",
+        "#sannicolas": "san-nicolas",
+        "#santacatarina": "s.-catarina",
+        "#escobedo": "escobedo",
+        "#apodaca": "apodaca"
+    }   
     not_full_text = full_text.split()
-
-    for x in range(len(posibles)):
-        for y in range(len(not_full_text)):
-            if not_full_text[y] == "s" or not_full_text[y] == "san" or not_full_text[y] == "santa": 
-                not_full_text[y] = not_full_text[y]+" "+not_full_text[y+1]
-            if posibles[x] == not_full_text[y] and ciudad == "-":
-                ciudad = posibles[x]
-            
+    for x in range(len(not_full_text)): 
+        if not_full_text[x].startswith('#') and not_full_text[x]!="#comoestaelairede":     
+            ciudad = not_full_text[x]
+            if not (ciudad in cities):
+                return "-"
+            ciudad = cities[ciudad] 
     return ciudad
 
 def busco_cuidad(full_text):
     ciudad = listas(full_text)
-    
     if (ciudad != "-"):
-        if ciudad == "cumbres" :
-            ciudad = "metrorrey"
-        first = [ciudad]
-        second = ["garcia", "metrorrey", "san-nicolas", "s.-catarina", "s.-pedro", "pastora", "apodaca", "escobedo"]
-        result = [s for f in first for s in second if is_similar(f,s, 0.7)]
-        lugar = result
-        URL ="https://aqicn.org/city/mexico/nuevo-leon/" + str(lugar)
+        URL ="https://aqicn.org/city/mexico/nuevo-leon/" + ciudad
         r = requests.get(URL) 
         soup = BeautifulSoup(r.text, 'html.parser')
         datos = soup.find('div', id='aqiwgtvalue').text.strip()
@@ -100,15 +100,19 @@ def reply_to_tweets():
         if '#comoestaelairede' in mention.full_text.lower():
             print('encontre #comoestaelairede', flush=True)
             datos = busco_cuidad(mention.full_text.lower())
-            resp = switchvalue(datos)
-
+            if datos != "-":
+                resp = switchvalue(int(datos))
+            else:
+                resp = 'no'
+            print (datos)
             switcher = {
+                'no' : "Lo siento compa, no hay informacion disponible, intenta mas tarde!",
                 'error' : "Lo siento, no te entendi, vuelve a preguntar por favor compa",
-                'poco' : "La calidad del aire es de "+datos+ " AQI El aire está hermoso pariente, disfruta tu día compa.",
-                'medio' : "La calidad del aire es de "+datos+ " AQI El aire está regular pero no es dañino, una carnita más y nos lleva la @$%&%.",
-                'mucho' : "La calidad del aire es de "+datos+ " AQI El aire está malo, evita realizar cualquier esfuerzo fuerte compa.",
-                'mal' : "La calidad del aire es de "+datos+ " AQI El aire está malisimo, igual que el reggeton.",
-                'pesimo' : "La calidad del aire es de "+datos+ " AQI El aire está horrible, tener la vida de Demi Lovato es mejor.",
+                'poco' : "La calidad del aire es de "+str(datos)+ " AQI \n¡Ajua Pariente!🤠.",
+                'medio' : "La calidad del aire es de "+str(datos)+ " AQI \n¡Ajua Pariente!🤠.",
+                'mucho' : "La calidad del aire es de "+str(datos)+ " \n¡Ajua Pariente!🤠.",
+                'mal' : "La calidad del aire es de "+str(datos)+ " AQI \n¡Ajua Pariente!🤠.",
+                'pesimo' : "La calidad del aire es de "+str(datos)+ " AQI \n¡Ajua Pariente!🤠.",
             }
             
             api.update_status('@' + mention.user.screen_name+"  "+switcher[resp], mention.id)
