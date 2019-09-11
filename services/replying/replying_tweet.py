@@ -16,23 +16,19 @@ auth.set_access_token(access_token, access_token_secret)
 auth.secure = True
 api = tweepy.API(auth)
 
-
-
-
-def switchvalue(datos):
-    if datos == 0 or datos >= 301:
-        sr = 'error'
-    if datos >= 1 or datos <= 50:
-        sr = 'poco'
-    if datos >= 51 or datos <= 100:
-        sr = 'medio'
-    if datos >= 101 or datos <= 150:
-        sr = 'mucho'
-    if datos >= 151 or datos <= 200:
-        sr = 'mal'
-    if datos >= 201 or datos <= 300:
-        sr = 'pesimo'
-    return sr
+def aqi_adjetive(aqi):
+    if aqi in range(0,50):
+        return "excelente"
+    elif aqi in range(51,100):
+        return "regular"
+    elif aqi in range(101,150):
+        return "mala"
+    elif aqi  in range(151, 200):
+        return "pésima"
+    elif aqi in range(201, 300):
+        return "horrible"
+    else:
+        return "Error"
 
 
 
@@ -51,7 +47,7 @@ def listas(full_text):
     }   
     not_full_text = full_text.split()
     for x in range(len(not_full_text)): 
-        if not_full_text[x].startswith('#') and not_full_text[x]!="#comoestaelairede":     
+        if not_full_text[x].startswith('#') and not_full_text[x]!="#comoesta":     
             ciudad = not_full_text[x]
             if not (ciudad in cities):
                 return "-"
@@ -91,66 +87,47 @@ def store_last_seen_id(last_seen_id, file_name):
 
 #contesta los tweets encontrados
 def reply_to_tweets():
-    print('Revisando nuevos tweets', flush=True)
+    cities = {
+        "#monterrey": "metrorrey",
+        "#cumbres": "metrorrey",
+        "#guadalupe": "pastora",
+        "#sanpedro": "s.-pedro",
+        "#garcia": "garcia",
+        "#sannicolas": "san-nicolas",
+        "#santacatarina": "s.-catarina",
+        "#escobedo": "escobedo",
+        "#apodaca": "apodaca"} 
     last_seen_id = retrieve_last_seen_id(FILE_NAME)
-    mentions = api.mentions_timeline(last_seen_id, tweet_mode='extended')
-
+    mentions = api.mentions_timeline(last_seen_id, tweet_mode='extended')            
     for mention in reversed(mentions):
         print(str(mention.id) + ' - ' + mention.full_text, flush=True)
         last_seen_id = mention.id
         store_last_seen_id(last_seen_id, FILE_NAME)
-        if '#comoestaelairede' in mention.full_text.lower():
-            print('encontre #comoestaelairede', flush=True)
+        if '#comoesta' in mention.full_text.lower():
             datos = busco_cuidad(mention.full_text.lower())
-            if datos != -1 and datos != "-":
-                resp = switchvalue(int(datos))
-            else:
-                if datos == -1:
-                    resp = 'error'
-                else:
-                    if datos == "-":
-                        resp = 'no'
-            print (datos)
-
             ciudad = "-" 
-            cities = {
-                "#monterrey": "metrorrey",
-                "#cumbres": "metrorrey",
-                "#guadalupe": "pastora",
-                "#sanpedro": "s.-pedro",
-                "#garcia": "garcia",
-                "#sannicolas": "san-nicolas",
-                "#santacatarina": "s.-catarina",
-                "#escobedo": "escobedo",
-                "#apodaca": "apodaca"
-            }   
             not_full_text = mention.full_text.split()
             for x in range(len(not_full_text)): 
-                if not_full_text[x].startswith('#') and not_full_text[x]!="#comoestaelairede":     
+                if not_full_text[x].startswith('#') and not_full_text[x]!="#comoesta":     
                     ciudad = not_full_text[x]
                     if not (ciudad in cities):
                         return "-"
                     ciudad2 = ciudad
             
+            if int(datos) != -1 and int(datos) != "-":
+                resp = "La calidad del aire esta " + aqi_adjetive(int(datos)) + " en " +ciudad2+" con un AQI de "+str(datos)+ ".\n¡Ajua Pariente!🤠."
 
-
-
-            a="á"
-            switcher = {
-                'no' : "Lo siento compa, no hay informacion disponible, intenta m"+a+"s tarde!",
-                'error' : "Lo siento, no te entendi, vuelve a preguntar por favor compa",
-                'poco' : "La calidad del aire en " +ciudad2+" es de "+str(datos)+ " AQI \n¡Ajua Pariente!🤠.",
-                'medio' : "La calidad del aire en " +ciudad2+" es de "+str(datos)+ " AQI \n¡Ajua Pariente!🤠.",
-                'mucho' : "La calidad del aire en " +ciudad2+" es de "+str(datos)+ " \n¡Ajua Pariente!🤠.",
-                'mal' : "La calidad del aire en " +ciudad2+" es de "+str(datos)+ " AQI \n¡Ajua Pariente!🤠.",
-                'pesimo' : "La calidad del aire en " +ciudad2+" es de "+str(datos)+ " AQI \n¡Ajua Pariente!🤠.",
-            }
+            else:
+                if int(datos) == -1 or int(datos) > 300:
+                    resp = "Lo siento, no te entendi, recuerda que debes usar #comoesta #ciudad."
+                else:
+                    if datos == "-":
+                        a = "á"
+                        resp = "Lo siento compa, no hay informacion disponible actualmente, intenta m"+a+"s tarde!"
 
             print(resp)
    
-            api.update_status('@' + mention.user.screen_name+"  "+switcher[resp], mention.id)
+            api.update_status('@' + mention.user.screen_name+"  "+resp, mention.id)
             
 
-while True:
-    reply_to_tweets()
-    time.sleep(5)
+reply_to_tweets()
