@@ -56,10 +56,12 @@ def listas(full_text):
             if not (ciudad in cities):
                 return "-"
             ciudad = cities[ciudad] 
+            
     return ciudad
 
 def busco_cuidad(full_text):
     ciudad = listas(full_text)
+    print(ciudad+"ciudad")
     if (ciudad != "-"):
         URL ="https://aqicn.org/city/mexico/nuevo-leon/" + ciudad
         r = requests.get(URL) 
@@ -67,7 +69,7 @@ def busco_cuidad(full_text):
         datos = soup.find('div', id='aqiwgtvalue').text.strip()
         print(datos)
     else:
-        datos=0
+        datos=-1
     return datos
 
 #file guarda el id del ultimo tweet contestado
@@ -100,21 +102,52 @@ def reply_to_tweets():
         if '#comoestaelairede' in mention.full_text.lower():
             print('encontre #comoestaelairede', flush=True)
             datos = busco_cuidad(mention.full_text.lower())
-            if datos != "-":
+            if datos != -1 and datos != "-":
                 resp = switchvalue(int(datos))
             else:
-                resp = 'no'
+                if datos == -1:
+                    resp = 'error'
+                else:
+                    if datos == "-":
+                        resp = 'no'
             print (datos)
-            switcher = {
-                'no' : "Lo siento compa, no hay informacion disponible, intenta mas tarde!",
-                'error' : "Lo siento, no te entendi, vuelve a preguntar por favor compa",
-                'poco' : "La calidad del aire es de "+str(datos)+ " AQI \n¡Ajua Pariente!🤠.",
-                'medio' : "La calidad del aire es de "+str(datos)+ " AQI \n¡Ajua Pariente!🤠.",
-                'mucho' : "La calidad del aire es de "+str(datos)+ " \n¡Ajua Pariente!🤠.",
-                'mal' : "La calidad del aire es de "+str(datos)+ " AQI \n¡Ajua Pariente!🤠.",
-                'pesimo' : "La calidad del aire es de "+str(datos)+ " AQI \n¡Ajua Pariente!🤠.",
-            }
+
+            ciudad = "-" 
+            cities = {
+                "#monterrey": "metrorrey",
+                "#cumbres": "metrorrey",
+                "#guadalupe": "pastora",
+                "#sanpedro": "s.-pedro",
+                "#garcia": "garcia",
+                "#sannicolas": "san-nicolas",
+                "#santacatarina": "s.-catarina",
+                "#escobedo": "escobedo",
+                "#apodaca": "apodaca"
+            }   
+            not_full_text = mention.full_text.split()
+            for x in range(len(not_full_text)): 
+                if not_full_text[x].startswith('#') and not_full_text[x]!="#comoestaelairede":     
+                    ciudad = not_full_text[x]
+                    if not (ciudad in cities):
+                        return "-"
+                    ciudad2 = ciudad
             
+
+
+
+            a="á"
+            switcher = {
+                'no' : "Lo siento compa, no hay informacion disponible, intenta m"+a+"s tarde!",
+                'error' : "Lo siento, no te entendi, vuelve a preguntar por favor compa",
+                'poco' : "La calidad del aire en " +ciudad2+" es de "+str(datos)+ " AQI \n¡Ajua Pariente!🤠.",
+                'medio' : "La calidad del aire en " +ciudad2+" es de "+str(datos)+ " AQI \n¡Ajua Pariente!🤠.",
+                'mucho' : "La calidad del aire en " +ciudad2+" es de "+str(datos)+ " \n¡Ajua Pariente!🤠.",
+                'mal' : "La calidad del aire en " +ciudad2+" es de "+str(datos)+ " AQI \n¡Ajua Pariente!🤠.",
+                'pesimo' : "La calidad del aire en " +ciudad2+" es de "+str(datos)+ " AQI \n¡Ajua Pariente!🤠.",
+            }
+
+            print(resp)
+   
             api.update_status('@' + mention.user.screen_name+"  "+switcher[resp], mention.id)
             
 
