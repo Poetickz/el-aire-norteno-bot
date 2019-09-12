@@ -114,8 +114,8 @@ def reply_to_tweets():
                         return "-"
                     ciudad2 = ciudad
             
-            if int(datos) != -1 and int(datos) != "-":
-                resp = "La calidad del aire esta " + aqi_adjetive(int(datos)) + " en " +ciudad2+" con un AQI de "+str(datos)+ ".\n¡Ajua Pariente!🤠."
+            if int(datos) != -1 and datos != "-":
+                resp = "La calidad del aire esta" + aqi_adjetive(int(datos)) + " en " +ciudad2+" con un AQI de "+str(datos)+ ".\n¡Ajua Pariente!🤠."
 
             else:
                 if int(datos) == -1 or int(datos) > 300:
@@ -128,6 +128,5 @@ def reply_to_tweets():
             print(resp)
    
             api.update_status('@' + mention.user.screen_name+"  "+resp, mention.id)
-            
 
 reply_to_tweets()
