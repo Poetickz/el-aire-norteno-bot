@@ -117,7 +117,7 @@ def reply_to_tweets():
                 a = "á"
                 resp = "Lo siento compa, no hay informacion disponible actualmente, intenta m"+a+"s tarde!"
 
-            if int(datos) != -1 and int(datos)<301:
+            elif int(datos) != -1 and int(datos)<301:
                 resp = "La calidad del aire esta " + aqi_adjetive(int(datos)) + " en " +ciudad2+" con un AQI de "+str(datos)+ ".\n¡Ajua Pariente!🤠."
 
             else:
