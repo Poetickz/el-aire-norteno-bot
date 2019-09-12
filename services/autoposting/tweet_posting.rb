@@ -16,7 +16,7 @@ def aqi_warning(aqi)
   when 0..50
     "El aire está hermoso pariente, disfruta tu día compa."
   when 51..100
-    "El aire está regular pero no es dañino, una carnita más y nos lleva la @$%&%."
+    "El aire está regular pero no es dañino, una carnita más y no la contamos."
   when 101..150
     "El aire está malo, evita realizar cualquier esfuerzo fuerte compa."
   when 151..200

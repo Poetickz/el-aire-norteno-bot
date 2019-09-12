@@ -113,17 +113,15 @@ def reply_to_tweets():
                     if not (ciudad in cities):
                         return "-"
                     ciudad2 = ciudad
-            
-            if int(datos) != -1 and datos != "-":
+            if datos == "-":
+                a = "á"
+                resp = "Lo siento compa, no hay informacion disponible actualmente, intenta m"+a+"s tarde!"
+
+            if int(datos) != -1 and int(datos)<301:
                 resp = "La calidad del aire esta " + aqi_adjetive(int(datos)) + " en " +ciudad2+" con un AQI de "+str(datos)+ ".\n¡Ajua Pariente!🤠."
 
             else:
-                if int(datos) == -1 or int(datos) > 300:
-                    resp = "Lo siento, no te entendi, recuerda que debes usar #comoesta #ciudad."
-                else:
-                    if datos == "-":
-                        a = "á"
-                        resp = "Lo siento compa, no hay informacion disponible actualmente, intenta m"+a+"s tarde!"
+                resp = "Lo siento, no te entendi, recuerda que debes usar #comoesta #ciudad.\n Las ciudades que estan: #monterrey, #cumbres, #guadalupe, #sanpedro, #garcia, #sannicolas, #apodaca, #escobedo, #santacatarina"
 
             print(resp)
    
