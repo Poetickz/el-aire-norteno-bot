@@ -115,7 +115,7 @@ def reply_to_tweets():
                     ciudad2 = ciudad
             
             if int(datos) != -1 and datos != "-":
-                resp = "La calidad del aire esta" + aqi_adjetive(int(datos)) + " en " +ciudad2+" con un AQI de "+str(datos)+ ".\n¡Ajua Pariente!🤠."
+                resp = "La calidad del aire esta " + aqi_adjetive(int(datos)) + " en " +ciudad2+" con un AQI de "+str(datos)+ ".\n¡Ajua Pariente!🤠."
 
             else:
                 if int(datos) == -1 or int(datos) > 300:
