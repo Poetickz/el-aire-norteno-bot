@@ -1,4 +1,4 @@
 while true
-    system("python services/replying/replying_tweet.py")
+    system("python3 services/replying/replying_tweet.py")
     sleep 15
 end
