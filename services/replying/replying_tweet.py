@@ -68,22 +68,13 @@ def busco_cuidad(full_text):
         datos=-1
     return datos
 
-#file guarda el id del ultimo tweet contestado
-FILE_NAME = './services/replying/last_seen_id.txt'
-
 #lee el id
-def retrieve_last_seen_id(file_name):
-    f_read = open(file_name, 'r')
-    last_seen_id = (f_read.read().strip())
-    f_read.close()
-    return last_seen_id
+def retrieve_last_seen_id():
+    return fb_db.get()["last_id"]
 
 #reescribe el id por el más nuevo
-def store_last_seen_id(last_seen_id, file_name):
-    f_write = open(file_name, 'w')
-    f_write.write(str(last_seen_id))
-    f_write.close()
-    return
+def store_last_seen_id(last_seen_id):
+    fb_db.update({"last_id": str(last_seen_id)})
 
 #contesta los tweets encontrados
 def reply_to_tweets():
@@ -97,12 +88,12 @@ def reply_to_tweets():
         "#santacatarina": "s.-catarina",
         "#escobedo": "escobedo",
         "#apodaca": "apodaca"} 
-    last_seen_id = retrieve_last_seen_id(FILE_NAME)
+    last_seen_id = retrieve_last_seen_id()
     mentions = api.mentions_timeline(last_seen_id, tweet_mode='extended')            
     for mention in reversed(mentions):
         print(str(mention.id) + ' - ' + mention.full_text, flush=True)
         last_seen_id = mention.id
-        store_last_seen_id(last_seen_id, FILE_NAME)
+        store_last_seen_id(last_seen_id)
         if '#comoesta' in mention.full_text.lower():
             datos = busco_cuidad(mention.full_text.lower())
             ciudad = "-" 

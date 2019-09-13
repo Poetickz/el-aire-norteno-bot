@@ -1,7 +1,24 @@
 import yaml
 import os
 import tweepy
+import firebase_admin
+import json
+import os
+from firebase_admin import credentials
+from firebase_admin import db
 
+
+if os.path.exists('secrets/el-aire-norteno-bot-firebase-adminsdk-mae3g-6348a4cdc1.json'):
+    cred = credentials.Certificate("secrets/el-aire-norteno-bot-firebase-adminsdk-mae3g-6348a4cdc1.json")
+else:
+    cred_json = json.loads(os.environ['FIREBASE-JSON'])
+    cred = credentials.Certificate(cred_json)
+
+firebase_admin.initialize_app(cred, {
+    'databaseURL': 'https://el-aire-norteno-bot.firebaseio.com'
+})
+
+fb_db = db.reference()
 
 if os.path.exists('secrets/twitter-keys.yml'):
     document = open('secrets/twitter-keys.yml', 'r')
