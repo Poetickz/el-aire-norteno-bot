@@ -3,21 +3,6 @@ import os
 import tweepy
 import pyrebase
 
-
-else:
-    config = {
-    "apiKey": "AIzaSyAXMJf1fYUs6lPxB4fT9uvtu2jPB_zhHPQ",
-    "authDomain": "el-aire-norteno-bot.firebaseapp.com",
-    "databaseURL": "https://el-aire-norteno-bot.firebaseio.com",
-    "projectId": "el-aire-norteno-bot",
-    "storageBucket": "el-aire-norteno-bot.appspot.com"}
-
-    firebase = pyrebase.initialize_app(config)
-    fb_db = firebase.database()
-
-
-
-
 if os.path.exists('secrets/twitter-keys.yml'):
     document = open('secrets/twitter-keys.yml', 'r')
     # and finally parse the file
@@ -43,3 +28,6 @@ else:
     "databaseURL": os.environ["databaseURL"],
     "projectId": "el-aire-norteno-bot",
     "storageBucket": os.environ["storageBucket"]}
+
+firebase = pyrebase.initialize_app(config)
+fb_db = firebase.database()
