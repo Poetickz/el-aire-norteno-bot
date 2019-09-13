@@ -97,13 +97,13 @@ def reply_to_tweets():
         if '#comoesta' in mention.full_text.lower():
             datos = busco_cuidad(mention.full_text.lower())
             ciudad = "-" 
-            not_full_text = mention.full_text.split()
+            not_full_text = mention.full_text.lower().split()
             for x in range(len(not_full_text)): 
                 if not_full_text[x].startswith('#') and not_full_text[x]!="#comoesta":     
-                    ciudad = not_full_text[x]
-                    if not (ciudad in cities):
+                    ciudad = not_full_text[x].lower()
+                    if not (ciudad.lower() in cities):
                         return "-"
-                    ciudad2 = ciudad
+                    ciudad2 = ciudad.lower()
             if datos == "-":
                 a = "á"
                 resp = "Lo siento compa, no hay informacion disponible actualmente, intenta m"+a+"s tarde!"
