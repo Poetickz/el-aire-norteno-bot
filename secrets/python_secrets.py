@@ -11,11 +11,10 @@ from firebase_admin import db
 if os.path.exists('secrets/el-aire-norteno-bot-firebase-adminsdk-mae3g-6348a4cdc1.json'):
     cred = credentials.Certificate("secrets/el-aire-norteno-bot-firebase-adminsdk-mae3g-6348a4cdc1.json")
 else:
-    cred_json = json.loads(os.environ['FIREBASE-JSON'])
-    with open('data.json', 'w', encoding='utf-8') as f:
-        json.dump(cred_json, f, ensure_ascii=False, indent=0)
-
-    cred = credentials.Certificate('data.json')
+    f= open(os.environ['FIREBASE-JSON-FILE'],"w+")
+    f.write(os.environ['FIREBASE-JSON'])
+    f.close
+    cred = credentials.Certificate(os.environ['FIREBASE-JSON-FILE'])
 
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://el-aire-norteno-bot.firebaseio.com'
