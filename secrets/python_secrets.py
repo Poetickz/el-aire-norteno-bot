@@ -11,9 +11,8 @@ from firebase_admin import db
 if os.path.exists('secrets/el-aire-norteno-bot-firebase-adminsdk-mae3g-6348a4cdc1.json'):
     cred = credentials.Certificate("secrets/el-aire-norteno-bot-firebase-adminsdk-mae3g-6348a4cdc1.json")
 else:
-    f= open(os.environ['FIREBASE-JSON-FILE'],"w+")
-    f.write(os.environ['FIREBASE-JSON'])
-    f.close
+    with open(os.environ['FIREBASE-JSON-FILE'], 'w') as json_file:
+        json.dump(os.environ['FIREBASE-JSON'], json_file)
     cred = credentials.Certificate(os.environ['FIREBASE-JSON-FILE'])
 
 firebase_admin.initialize_app(cred, {
