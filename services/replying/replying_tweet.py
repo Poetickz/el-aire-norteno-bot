@@ -70,7 +70,7 @@ def busco_cuidad(full_text):
 
 #lee el id
 def retrieve_last_seen_id():
-    return fb_db.get()["last_id"]
+    return fb_db.get().val()["last_id"]
 
 #reescribe el id por el más nuevo
 def store_last_seen_id(last_seen_id):

@@ -1,33 +1,22 @@
 import yaml
 import os
 import tweepy
-import firebase_admin
-import json
-import os
-from firebase_admin import credentials
-from firebase_admin import db
+import pyrebase
 
 
-if os.path.exists('secrets/el-aire-norteno-bot-firebase-adminsdk-mae3g-6348a4cdc1.json'):
-    cred = credentials.Certificate("secrets/el-aire-norteno-bot-firebase-adminsdk-mae3g-6348a4cdc1.json")
-    firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://el-aire-norteno-bot.firebaseio.com'
-    })
 else:
-    firebase_admin.initialize_app( credentials.Certificate({
-        "type": os.environ["FIREBASE_TYPE"],
-        "project_id": "el-aire-norteno-bot",
-        "private_key_id": os.environ["FIREBASE_PRIVATE_KEY_ID"],
-        "private_key": os.environ["FIREBASE_PRIVATE_KEY"],
-        "client_email": os.environ["FIREBASE_CLIENT_EMAIL"],
-        "client_id": os.environ["FIREBASE_CLIENT_ID"],
-        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-        "token_uri": "https://oauth2.googleapis.com/token",
-        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs"}), 
-    {'databaseURL': 'https://el-aire-norteno-bot.firebaseio.com'})
+    config = {
+    "apiKey": "AIzaSyAXMJf1fYUs6lPxB4fT9uvtu2jPB_zhHPQ",
+    "authDomain": "el-aire-norteno-bot.firebaseapp.com",
+    "databaseURL": "https://el-aire-norteno-bot.firebaseio.com",
+    "projectId": "el-aire-norteno-bot",
+    "storageBucket": "el-aire-norteno-bot.appspot.com"}
+
+    firebase = pyrebase.initialize_app(config)
+    fb_db = firebase.database()
 
 
-fb_db = db.reference()
+
 
 if os.path.exists('secrets/twitter-keys.yml'):
     document = open('secrets/twitter-keys.yml', 'r')
@@ -37,8 +26,20 @@ if os.path.exists('secrets/twitter-keys.yml'):
     consumer_secret = parsed["twitter-keys"]["api-secret-key"]
     access_token = parsed["twitter-keys"]["access-key"]
     access_token_secret = parsed["twitter-keys"]["access-secret-key"]
+    config = {
+    "apiKey": parsed["firebase-keys"]["apiKey"],
+    "authDomain": parsed["firebase-keys"]["authDomain"],
+    "databaseURL": parsed["firebase-keys"]["databaseURL"],
+    "projectId": "el-aire-norteno-bot",
+    "storageBucket": parsed["firebase-keys"]["storageBucket"]}
 else:
     consumer_key = os.environ['API-KEY']
     consumer_secret = os.environ['API-SECRET-KEY']
     access_token = os.environ['ACCESS-KEY']
     access_token_secret = os.environ['ACCESS-SECRET-KEY']
+    config = {
+    "apiKey": os.environ["apiKey"],
+    "authDomain": os.environ["authDomain"],
+    "databaseURL": os.environ["databaseURL"],
+    "projectId": "el-aire-norteno-bot",
+    "storageBucket": os.environ["storageBucket"]}
