@@ -14,8 +14,7 @@ if os.path.exists('secrets/el-aire-norteno-bot-firebase-adminsdk-mae3g-6348a4cdc
     'databaseURL': 'https://el-aire-norteno-bot.firebaseio.com'
     })
 else:
-    firebase_admin.initialize_app({
-    credential: admin.credential.cert({
+    firebase_admin.initialize_app( credentials.Certificate({
     "type": os.environ["FIREBASE_TYPE"],
     "project_id": "el-aire-norteno-bot",
     "private_key_id": os.environ["FIREBASE_PRIVATE_KEY_ID"],
