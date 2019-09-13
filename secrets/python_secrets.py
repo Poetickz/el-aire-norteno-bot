@@ -12,7 +12,10 @@ if os.path.exists('secrets/el-aire-norteno-bot-firebase-adminsdk-mae3g-6348a4cdc
     cred = credentials.Certificate("secrets/el-aire-norteno-bot-firebase-adminsdk-mae3g-6348a4cdc1.json")
 else:
     cred_json = json.loads(os.environ['FIREBASE-JSON'])
-    cred = credentials.Certificate(cred_json)
+    with open('data.json', 'w', encoding='utf-8') as f:
+        json.dump(cred_json, f, ensure_ascii=False, indent=0)
+
+    cred = credentials.Certificate('data.json')
 
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://el-aire-norteno-bot.firebaseio.com'
